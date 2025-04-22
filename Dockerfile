@@ -3,9 +3,9 @@ FROM golang:1.22.5  AS base
 
 WORKDIR /app
 
-copy go.mod .
+COPY go.mod .
 
-run go mod download
+RUN go mod download
 
 COPY . .
 
