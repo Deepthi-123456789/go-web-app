@@ -64,6 +64,11 @@ pipeline {
         stage('Docker Image Build') {
             when { expression { params.action == 'create' } }
             steps {
+                sh '''
+                    echo "Checking contents of go-web-app directory..."
+                    cd go-web-app
+                    ls -al
+                    '''
                 sh "docker build -t ${params.DockerHubUser}/${params.ImageName}:${params.ImageTag} ."
             }
         }
