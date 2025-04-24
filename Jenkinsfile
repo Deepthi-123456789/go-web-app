@@ -69,7 +69,7 @@ pipeline {
                     cd go-web-app
                     ls -al
                     '''
-                sh "docker build -t ${params.DockerHubUser}/${params.ImageName}:${params.ImageTag} ."
+                sh "docker build -t ${params.DockerHubUser}/${params.ImageName} ."
             }
         }
 
