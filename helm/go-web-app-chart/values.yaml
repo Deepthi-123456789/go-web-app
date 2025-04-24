@@ -1,0 +1,5 @@
+replicaCount: 1
+image:
+  repository: deepthi555/go-web-app
+  pullPolicy: IfNotPresent
+  tag: "latest"
