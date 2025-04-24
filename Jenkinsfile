@@ -31,7 +31,7 @@ pipeline {
             steps {
                 script {
                     echo 'Building the Go web application...'
-                    sh 'go build -o go-web-app ./main.go'
+                    sh 'go build -o go-web-app main.go'
                     echo "Build completed"
                 }
             }
