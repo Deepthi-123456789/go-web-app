@@ -61,22 +61,27 @@ pipeline {
             }
         }
 
-        stage('Docker Image Push : DockerHub') {
-            when {
-                expression { params.action == 'create' }
-            }
+        stage('Docker Image Build') {
+            when { expression { params.action == 'create' } }
             steps {
-                script {
-                    echo "Starting Docker Image Push Stage"
-                    withCredentials([usernamePassword(credentialsId: 'docker', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
-                        sh "docker build -t ${params.DockerHubUser}/${params.ImageName}:${params.ImageTag} ."
-                        sh "docker push ${params.DockerHubUser}/${params.ImageName}:${params.ImageTag}"
-                        echo "Docker Image Push completed"
-                    }
-                }
+                sh "docker build -t ${params.DockerHubUser}/${params.ImageName}:${params.ImageTag} ."
             }
         }
+
+        stage('Docker Image Push : DockerHub') {
+            when { expression { params.action == 'create' } }
+            steps {
+                echo "Starting Docker Image Push Stage"
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'docker', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+                        sh "docker push ${params.DockerHubUser}/${params.ImageName}:${params.ImageTag}"
+                    }
+                }
+                echo "Docker Image Push completed"
+            }
+        }
+
 
         stage('Check Helm Version') {
             when {
