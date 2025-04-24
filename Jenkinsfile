@@ -4,7 +4,7 @@ pipeline {
     parameters {
         choice(name: 'action', choices: ['create', 'delete'], description: 'Choose create/Destroy')
         string(name: 'ImageName', defaultValue: 'go-web-app', description: 'Name of the Docker build')
-        string(name: 'ImageTag', defaultValue: 'latest', description: 'Tag of the Docker build')
+        string(name: 'ImageTag', defaultValue: 'v1', description: 'Tag of the Docker build')
         string(name: 'DockerHubUser', defaultValue: 'deepthi555', description: 'DockerHub Username')
     }
 
@@ -70,7 +70,7 @@ pipeline {
                     echo "Starting Docker Image Push Stage"
                     withCredentials([usernamePassword(credentialsId: 'docker', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
-                        sh "docker push ${params.DockerHubUser}/${params.ImageName}"
+                        sh "docker push ${params.DockerHubUser}/${params.ImageName}:${params.ImageTag}"
                         echo "Docker Image Push completed"
                     }
                 }
