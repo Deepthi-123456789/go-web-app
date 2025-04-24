@@ -70,7 +70,7 @@ pipeline {
                     echo "Starting Docker Image Push Stage"
                     withCredentials([usernamePassword(credentialsId: 'docker', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
-                        sh "docker push ${params.DockerHubUser}/${params.ImageName}:${params.ImageTag}"
+                        sh "docker push ${params.DockerHubUser}/${params.ImageName}"
                         echo "Docker Image Push completed"
                     }
                 }
