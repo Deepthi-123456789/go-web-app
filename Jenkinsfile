@@ -9,6 +9,8 @@ pipeline {
     }
 
     environment {
+        ARCH=amd64
+        PLATFORM=$(uname -s)_$ARCH
         GO_VERSION = "1.22"
         GO_ROOT = "/usr/local/go"
         PATH = "${GO_ROOT}/bin:${env.PATH}"
@@ -102,20 +104,21 @@ pipeline {
                 script {
                     echo "Installing eksctl and kubectl..."
 
-                    // Install eksctl
-                   sh '''
-                        curl --silent --location "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp
-                        sudo mv /tmp/eksctl /usr/local/bin
-                    '''
-                    echo "eksctl installation completed"
-
-
                     // Install kubectl
                     sh '''
                         curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/latest/bin/linux/amd64/kubectl
                         chmod +x ./kubectl
                         sudo mv ./kubectl /usr/local/bin
                     '''
+                    // Install eksctl
+                     sh '''
+                        curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"
+                        tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$PLATFORM.tar.gz
+                        sudo mv /tmp/eksctl /usr/local/bin
+                    '''
+                    
+                    echo "eksctl installation completed"
+
 
                     echo "Creating Kubernetes cluster..."
                     sh 'eksctl create cluster --name go-web-app-cluster --region us-east-1'
