@@ -103,10 +103,11 @@ pipeline {
                     echo "Installing eksctl and kubectl..."
 
                     // Install eksctl
-                    sh '''
-                        curl --silent --location "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$(uname -S)_amd64.tar.gz" | tar xz -C /tmp
+                   sh '''
+                        curl --silent --location "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp
                         sudo mv /tmp/eksctl /usr/local/bin
                     '''
+
 
                     // Install kubectl
                     sh '''
